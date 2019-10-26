@@ -1,0 +1,20 @@
+name:                turbolift
+version:             0.1.0.0
+github:              "nicuveo/turbolift"
+license:             BSD3
+author:              "Antoine Leblanc"
+copyright:           "2019 Antoine Leblanc"
+
+extra-source-files:
+  - README.md
+  - ChangeLog.md
+
+description:         Please see the README on GitHub at <https://github.com/githubuser/turbolift#readme>
+
+dependencies:
+  - base >= 4.7 && < 5
+  - mtl
+
+
+library:
+  source-dirs: src
