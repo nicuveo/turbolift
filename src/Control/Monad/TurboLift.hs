@@ -1,12 +1,9 @@
-{-# LANGUAGE AllowAmbiguousTypes   #-}
 {-# LANGUAGE ConstraintKinds       #-}
 {-# LANGUAGE DataKinds             #-}
 {-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE KindSignatures        #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
-{-# LANGUAGE TypeApplications      #-}
 {-# LANGUAGE TypeFamilies          #-}
 {-# LANGUAGE TypeOperators         #-}
 {-# LANGUAGE UndecidableInstances  #-}
@@ -25,16 +22,16 @@ import           Data.Type.Equality
 
 type Below b m = Below' b m (b == m)
 
-hoist :: forall b m a. Below b m => b a -> m a
-hoist = hoistImpl (Proxy :: Proxy (b == m))
+hoist :: forall b m a. b `Below` m => b a -> m a
+hoist = hoist' (Proxy :: Proxy (b == m))
 
 
 
 class Below' b m (eq :: Bool) where
-  hoistImpl :: Proxy eq -> b a -> m a
+  hoist' :: Proxy eq -> b a -> m a
 
 instance b ~ m => Below' b m 'True where
-  hoistImpl _ = id
+  hoist' _ = id
 
-instance (MonadTrans t, Monad m, Below b m) => Below' b (t m) 'False where
-  hoistImpl _ = lift . hoist
+instance (MonadTrans t, Monad m, b `Below` m) => Below' b (t m) 'False where
+  hoist' _ = lift . hoist
